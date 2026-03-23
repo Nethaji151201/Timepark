@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ShoppingBag, Phone } from "lucide-react";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import wristImg from "../assets/images/watches/wristwatch.png";
 import wallImg from "../assets/images/clocks/wallclock.png";
 import tableImg from "../assets/images/clocks/tableclock.png";
@@ -106,6 +107,8 @@ const badgeColors = {
 
 export default function ProductsSection() {
   const [active, setActive] = useState("All");
+  const heading = useScrollAnimation();
+  const grid = useScrollAnimation(0.05);
 
   const filtered =
     active === "All" ? products : products.filter((p) => p.category === active);
@@ -119,7 +122,10 @@ export default function ProductsSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <div className="text-center mb-10">
+        <div
+          ref={heading.ref}
+          className={`text-center mb-10 anim-hidden ${heading.isVisible ? "anim-slide-up" : ""}`}
+        >
           <p className="text-[#d4af37] text-sm font-semibold tracking-[3px] uppercase mb-3">
             Our Collection
           </p>
@@ -151,11 +157,14 @@ export default function ProductsSection() {
         </div>
 
         {/* Product grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filtered.map((product) => (
+        <div ref={grid.ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filtered.map((product, i) => (
             <div
               key={product.id}
-              className="group bg-[#121212] border border-[#1f1f1f] rounded-2xl overflow-hidden card-hover hover:border-[#d4af37]/40"
+              className={`group bg-[#121212] border border-[#1f1f1f] rounded-2xl overflow-hidden card-hover hover:border-[#d4af37]/40 anim-hidden ${
+                grid.isVisible ? (i % 2 === 0 ? "anim-slide-left" : "anim-slide-right") : ""
+              }`}
+              style={grid.isVisible ? { animationDelay: `${i * 0.08}s` } : {}}
             >
               {/* Image */}
               <div className="relative overflow-hidden h-52 bg-[#0d0d0d]">

@@ -6,6 +6,7 @@ import radoImg from "../assets/images/brands/rado.png";
 import wingsImg from "../assets/images/brands/wings.png";
 import titanImg from "../assets/images/brands/titan2.png";
 import ajanta from "../assets/images/brands/ajanta.png";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
 const brands = [
   { name: "Fastrack", tagline: "Trendy & Bold", img: fastrackImg },
@@ -19,6 +20,9 @@ const brands = [
 ];
 
 export default function BrandsSection() {
+  const heading = useScrollAnimation();
+  const grid = useScrollAnimation(0.05);
+
   return (
     <section
       id="brands"
@@ -35,8 +39,11 @@ export default function BrandsSection() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Heading */}
-        <div className="text-center mb-14">
+        {/* Heading — slides up */}
+        <div
+          ref={heading.ref}
+          className={`text-center mb-14 anim-hidden ${heading.isVisible ? "anim-slide-up" : ""}`}
+        >
           <p className="text-[#d4af37] text-sm font-semibold tracking-[3px] uppercase mb-3">
             Official Stockist
           </p>
@@ -50,12 +57,15 @@ export default function BrandsSection() {
           </p>
         </div>
 
-        {/* Brand image cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-5">
-          {brands.map((brand) => (
+        {/* Brand cards — staggered slide-up */}
+        <div ref={grid.ref} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
+          {brands.map((brand, i) => (
             <div
               key={brand.name}
-              className="group relative bg-[#121212] border border-[#1f1f1f] rounded-2xl overflow-hidden cursor-pointer transition-all duration-400 hover:border-[#d4af37]/60 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(212,175,55,0.2)]"
+              className={`group relative bg-[#121212] border border-[#1f1f1f] rounded-2xl overflow-hidden cursor-pointer transition-all duration-400 hover:border-[#d4af37]/60 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(212,175,55,0.2)] anim-hidden ${
+                grid.isVisible ? (i % 2 === 0 ? "anim-slide-left" : "anim-slide-right") : ""
+              }`}
+              style={grid.isVisible ? { animationDelay: `${i * 0.07}s` } : {}}
             >
               {/* Brand logo image */}
               <div className="relative h-32 sm:h-36 flex items-center justify-center bg-[#0d0d0d] overflow-hidden">
@@ -65,7 +75,6 @@ export default function BrandsSection() {
                   className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
-                {/* Gold overlay on hover */}
                 <div className="absolute inset-0 bg-[#d4af37]/0 group-hover:bg-[#d4af37]/10 transition-all duration-400" />
               </div>
 

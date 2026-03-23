@@ -1,11 +1,14 @@
 import { MapPin, Phone, Clock, MessageCircle, Navigation } from "lucide-react";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
 const timings = [
   { day: "Everyday", time: "9:30 AM – 9:00 PM", open: true },
-  // { day: 'Sunday', time: '9:30 AM – 9:00 PM', open: true },
 ];
 
 export default function ContactSection() {
+  const infoAnim = useScrollAnimation();
+  const mapAnim = useScrollAnimation();
+
   const whatsappUrl =
     "https://wa.me/919443018945?text=Hello%20Time%20Park%2C%20I%20am%20interested%20in%20your%20watch%20collection.%20Please%20share%20more%20details.";
   const mapsUrl =
@@ -31,8 +34,11 @@ export default function ContactSection() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-10 items-start">
-          {/* Info column */}
-          <div className="space-y-6">
+          {/* Info column — slides from LEFT */}
+          <div
+            ref={infoAnim.ref}
+            className={`space-y-6 anim-hidden ${infoAnim.isVisible ? "anim-slide-left" : ""}`}
+          >
             {/* Address */}
             <div className="bg-[#121212] border border-[#1f1f1f] rounded-2xl p-6 hover:border-[#d4af37]/40 transition-all duration-300">
               <div className="flex items-start gap-4">
@@ -40,19 +46,12 @@ export default function ContactSection() {
                   <MapPin size={22} className="text-[#d4af37]" />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold text-base mb-1">
-                    Our Address
-                  </h3>
+                  <h3 className="text-white font-bold text-base mb-1">Our Address</h3>
                   <p className="text-[#bfbfbf] text-sm leading-relaxed">
-                    Opposite Bombay Anand Bhavan,
-                    <br />
-                    Suthanthira Ponvizha Nagar,
-                    <br />
-                    Bharathi Nagar, Katpadi,
-                    <br />
-                    <span className="text-[#d4af37] font-semibold">
-                      Vellore, Tamil Nadu – 632006
-                    </span>
+                    Opposite Bombay Anand Bhavan,<br />
+                    Suthanthira Ponvizha Nagar,<br />
+                    Bharathi Nagar, Katpadi,<br />
+                    <span className="text-[#d4af37] font-semibold">Vellore, Tamil Nadu – 632006</span>
                   </p>
                   <a
                     href={mapsUrl}
@@ -74,18 +73,11 @@ export default function ContactSection() {
                   <Phone size={22} className="text-[#d4af37]" />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold text-base mb-1">
-                    Call Us
-                  </h3>
-                  <a
-                    href="tel:9443018945"
-                    className="text-[#d4af37] font-bold text-xl hover:text-[#e8c84a] transition-colors"
-                  >
+                  <h3 className="text-white font-bold text-base mb-1">Call Us</h3>
+                  <a href="tel:9443018945" className="text-[#d4af37] font-bold text-xl hover:text-[#e8c84a] transition-colors">
                     94430 18945
                   </a>
-                  <p className="text-[#808080] text-xs mt-0.5">
-                    Tap to call directly
-                  </p>
+                  <p className="text-[#808080] text-xs mt-0.5">Tap to call directly</p>
                 </div>
               </div>
             </div>
@@ -97,22 +89,13 @@ export default function ContactSection() {
                   <Clock size={22} className="text-[#d4af37]" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-white font-bold text-base mb-3">
-                    Shop Timings
-                  </h3>
+                  <h3 className="text-white font-bold text-base mb-3">Shop Timings</h3>
                   {timings.map((t) => (
-                    <div
-                      key={t.day}
-                      className="flex items-center justify-between py-2 border-b border-[#1f1f1f] last:border-0"
-                    >
+                    <div key={t.day} className="flex items-center justify-between py-2 border-b border-[#1f1f1f] last:border-0">
                       <span className="text-[#bfbfbf] text-sm">{t.day}</span>
                       <div className="flex items-center gap-2">
-                        <span
-                          className={`w-2 h-2 rounded-full ${t.open ? "bg-green-500" : "bg-red-500"}`}
-                        />
-                        <span className="text-[#d4af37] font-semibold text-sm">
-                          {t.time}
-                        </span>
+                        <span className={`w-2 h-2 rounded-full ${t.open ? "bg-green-500" : "bg-red-500"}`} />
+                        <span className="text-[#d4af37] font-semibold text-sm">{t.time}</span>
                       </div>
                     </div>
                   ))}
@@ -141,9 +124,10 @@ export default function ContactSection() {
             </div>
           </div>
 
-          {/* Map embed */}
+          {/* Map — slides from RIGHT */}
           <div
-            className="rounded-2xl overflow-hidden border border-[#1f1f1f] shadow-2xl"
+            ref={mapAnim.ref}
+            className={`rounded-2xl overflow-hidden border border-[#1f1f1f] shadow-2xl anim-hidden ${mapAnim.isVisible ? "anim-slide-right" : ""}`}
             style={{ height: "480px" }}
           >
             <iframe
@@ -153,8 +137,7 @@ export default function ContactSection() {
               height="100%"
               style={{
                 border: 0,
-                filter:
-                  "invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.1)",
+                filter: "invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.1)",
               }}
               allowFullScreen=""
               loading="lazy"

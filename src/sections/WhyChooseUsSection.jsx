@@ -6,6 +6,7 @@ import {
   Package,
   Clock,
 } from "lucide-react";
+import { useScrollAnimation } from "../hooks/useScrollAnimation";
 
 const reasons = [
   {
@@ -40,13 +41,17 @@ const reasons = [
   },
 ];
 
+const slideDir = ["anim-slide-left", "anim-slide-up", "anim-slide-right"];
+
 export default function WhyChooseUsSection() {
+  const heading = useScrollAnimation();
+  const grid = useScrollAnimation(0.05);
+
   return (
     <section
       id="why-us"
       className="py-20 lg:py-28 bg-black relative overflow-hidden"
     >
-      {/* Diagonal gold strip */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
       <div
@@ -60,7 +65,10 @@ export default function WhyChooseUsSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Heading */}
-        <div className="text-center mb-14">
+        <div
+          ref={heading.ref}
+          className={`text-center mb-14 anim-hidden ${heading.isVisible ? "anim-slide-up" : ""}`}
+        >
           <p className="text-[#d4af37] text-sm font-semibold tracking-[3px] uppercase mb-3">
             Our Promise
           </p>
@@ -70,13 +78,15 @@ export default function WhyChooseUsSection() {
           <div className="gold-divider w-24 mx-auto" />
         </div>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Cards grid — alternating left / up / right per row */}
+        <div ref={grid.ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {reasons.map(({ icon: Icon, title, desc }, i) => (
             <div
               key={title}
-              className="group relative bg-[#0a0a0a] border border-[#1f1f1f] rounded-2xl p-7 hover:border-[#d4af37]/50 transition-all duration-400 card-hover overflow-hidden"
-              style={{ animationDelay: `${i * 0.1}s` }}
+              className={`group relative bg-[#0a0a0a] border border-[#1f1f1f] rounded-2xl p-7 hover:border-[#d4af37]/50 transition-all duration-400 card-hover overflow-hidden anim-hidden ${
+                grid.isVisible ? slideDir[i % 3] : ""
+              }`}
+              style={grid.isVisible ? { animationDelay: `${i * 0.1}s` } : {}}
             >
               {/* Number watermark */}
               <span className="absolute top-4 right-5 font-display font-bold text-6xl text-[#1a1a1a] select-none group-hover:text-[#d4af37]/10 transition-colors duration-300">
