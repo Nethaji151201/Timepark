@@ -175,7 +175,7 @@ export default function Footer() {
           </p>
           <p>
             Designed with <span className="text-[#d4af37]">♥</span> for{" "}
-            <span className="text-[#d4af37] font-semibold">Aslam</span> &amp;
+            <span className="text-[#d4af37] font-semibold">Nethaji</span> &amp;
             Time Park
           </p>
         </div>
